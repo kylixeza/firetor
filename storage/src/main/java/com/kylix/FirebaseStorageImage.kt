@@ -13,11 +13,11 @@ object FirebaseStorageImage {
     fun PartData.FileItem.uploadImage(
         path: String? = null,
         fileExtension: ImageExtension = ImageExtension.JPG,
-        pipeline: ImagePreprocessing.(ByteArray) -> ByteArray = { it }
+        preprocessing: ImagePreprocessing.(ByteArray) -> ByteArray = { it }
     ) = run {
         val fileBytes = streamProvider().readBytes()
         val imagePipeline = ImagePreprocessing(fileExtension)
-        val processedImage = imagePipeline.pipeline(fileBytes)
+        val processedImage = imagePipeline.preprocessing(fileBytes)
         val fileName = NanoIdUtils.randomNanoId() + "." + fileExtension.extension
         if (path == null) {
             bucket.create(fileName, processedImage, "image/${fileExtension.extension}")
