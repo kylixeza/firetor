@@ -39,9 +39,9 @@ fun Application.configureRouting() {
                     if (part is PartData.FileItem) {
                         url = part.uploadImage(
                             path = "images",
-                            fileExtension = ImageExtension.PNG,
+                            fileExtension = ImageExtension.JPG,
                             preprocessing = {
-                                it.compress(0.1f)
+                                it.compress(0.9f)
                             }
                         )
                     }
