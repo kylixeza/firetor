@@ -20,20 +20,33 @@ class Firetor(configuration: Configuration) {
             val configuration = Configuration.apply(configure)
             Firetor(configuration).apply {
                 pipeline.intercept(ApplicationCallPipeline.Plugins) {
-                    val serviceAccount = this::class.java.classLoader.getResourceAsStream(adminKeyFileName)
-                    val options = FirebaseOptions.builder()
+                    val serviceAccount = getServiceAccount(adminKeyFileName)
+
+                    val baseOptions = FirebaseOptions.builder()
                         .setCredentials(GoogleCredentials.fromStream(serviceAccount))
-                        .setStorageBucket(storageBucket)
-                    if (basicConfiguration != null) {
-                        options.basicConfiguration()
+
+                    if (checkIsFirebaseStorageEnabled(storageBucket)) {
+                        baseOptions.setStorageBucket(getStorageBucket(storageBucket))
                     }
+
+                    baseOptions.basicConfiguration()
+
                     if (FirebaseApp.getApps().isEmpty()) {
-                        FirebaseApp.initializeApp(options.build())
+                        FirebaseApp.initializeApp(baseOptions.build())
                     }
                 }
             }
         }
 
+        private fun getServiceAccount(adminKeyFileName: String?) = run {
+            checkNotNull(adminKeyFileName, "Admin key file name must not be null")
+            this::class.java.classLoader.getResourceAsStream(adminKeyFileName)
+        }
+
+        private fun getStorageBucket(storageBucket: String?) = run {
+            checkIsBucketUrlRight(storageBucket)
+            storageBucket
+        }
     }
 
 }
