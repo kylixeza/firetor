@@ -69,6 +69,8 @@ fun Application.module() {
 }
 ```
 
+> Firetor still has access to configure other firebase options such as setDatabaseUrl, setThreadManager, setGoogleCredendtials, etc. But you need to setup that manually through `setBasicConfiguration()` function and you can write your own code as stated in firebase's documentation
+
 ## Features
 
 - ### [Firebase Storage](https://github.com/KylixEza/firetor/blob/release/storage/README.md)
