@@ -6,10 +6,21 @@ import com.kylix.URLBuilder.getDownloadUrl
 import com.kylix.URLBuilder.reference
 import io.ktor.http.content.*
 
+/**
+ * This class is used to upload image to firebase storage
+ * @author Kylix Eza Saputra
+ */
 object FirebaseStorageImage {
 
     private val bucket = StorageClient.getInstance().bucket()
 
+    /**
+     * This function is used to upload image to firebase storage
+     * @param path the path where the image will be stored
+     * @param fileExtension the extension of the image
+     * @param preprocessing the preprocessing function
+     * @return the download url of the image
+     */
     fun PartData.FileItem.uploadImage(
         path: String? = null,
         fileExtension: ImageExtension = ImageExtension.JPG,

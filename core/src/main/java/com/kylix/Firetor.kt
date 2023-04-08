@@ -6,6 +6,12 @@ import com.google.firebase.FirebaseOptions
 import io.ktor.server.application.*
 import io.ktor.util.*
 
+/**
+ * The `Firetor` class is the main class of the Firetor library. It is used to initialize the Firebase SDK.
+ * @author Kylix Eza Saputra
+ * @param configuration The `configuration` parameter is an instance of the `Configuration` class. It is used to
+ * configure the Firebase SDK.
+ */
 class Firetor(configuration: Configuration) {
 
     private val adminKeyFileName: String? = configuration.adminKeyFileName

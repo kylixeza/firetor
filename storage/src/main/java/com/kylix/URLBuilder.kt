@@ -1,5 +1,9 @@
 package com.kylix
 
+/**
+ * This class is used to build the URL
+ * @author Kylix Eza Saputra
+ */
 object URLBuilder {
 
     internal fun initPath() = ""

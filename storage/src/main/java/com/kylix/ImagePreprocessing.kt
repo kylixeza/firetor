@@ -5,8 +5,18 @@ import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import javax.imageio.ImageIO
 
+/**
+ * This class is used to preprocess image
+ * @param imageExtension the extension of the image
+ * @author Kylix Eza Saputra
+ */
 class ImagePreprocessing(private val imageExtension: ImageExtension) {
 
+    /**
+     * Compress image with quality
+     * @param quality 0.0f - 1.0f (0.0f is the worst quality, 1.0f is the best quality)
+     * @return compressed image in ByteArray
+     */
     fun ByteArray.compress(quality: Float): ByteArray = run {
         var image = ImageIO.read(ByteArrayInputStream(this))
         val outputStream = ByteArrayOutputStream()
@@ -27,6 +37,7 @@ class ImagePreprocessing(private val imageExtension: ImageExtension) {
         imageOutputStream.close()
         outputStream.toByteArray()
     }
+
     private fun BufferedImage.removeAlphaChannel(): BufferedImage {
         if (!colorModel.hasAlpha()) {
             return createImage(width, height, true)
@@ -43,6 +54,12 @@ class ImagePreprocessing(private val imageExtension: ImageExtension) {
         BufferedImage(width, height, if (hasNoAlpha) BufferedImage.TYPE_INT_ARGB else BufferedImage.TYPE_INT_RGB)
     }
 
+    /**
+     * Resize image
+     * @param newWidth new width of image
+     * @param newHeight new height of image
+     * @return resized image in ByteArray
+     */
     fun ByteArray.resize(newWidth: Int, newHeight: Int): ByteArray {
         val inputStream = ByteArrayInputStream(this)
         val originalImage = ImageIO.read(inputStream)
@@ -54,6 +71,10 @@ class ImagePreprocessing(private val imageExtension: ImageExtension) {
         return outputStream.toByteArray()
     }
 
+    /**
+     * Flip image horizontally
+     * @return flipped image in ByteArray
+     */
     fun ByteArray.flipVertical(): ByteArray = run {
         val inputStream = ByteArrayInputStream(this)
         val originalImage = ImageIO.read(inputStream)
@@ -64,6 +85,11 @@ class ImagePreprocessing(private val imageExtension: ImageExtension) {
         return@run outputStream.toByteArray()
     }
 
+    /**
+     * Rotate image
+     * @param degrees degrees to rotate
+     * @return rotated image in ByteArray
+     */
     fun ByteArray.rotate(degrees: Double): ByteArray = run {
         val inputStream = ByteArrayInputStream(this)
         val originalImage = ImageIO.read(inputStream)
@@ -77,6 +103,10 @@ class ImagePreprocessing(private val imageExtension: ImageExtension) {
 
     }
 
+    /**
+     * Flip image vertically
+     * @return flipped image in ByteArray
+     */
     fun ByteArray.flipHorizontal(): ByteArray = run {
         val inputStream = ByteArrayInputStream(this)
         val originalImage = ImageIO.read(inputStream)

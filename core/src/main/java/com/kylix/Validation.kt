@@ -1,5 +1,9 @@
 package com.kylix
 
+/**
+ * @author Kylix Eza Saputra
+ */
+
 internal fun<T> checkNotNull(value: T?, message: String) {
     if (value == null) {
         throw IllegalArgumentException(message)
