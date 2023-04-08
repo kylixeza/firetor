@@ -1,12 +1,12 @@
 package com.kylix
 
-fun<T> checkNotNull(value: T?, message: String) {
+internal fun<T> checkNotNull(value: T?, message: String) {
     if (value == null) {
         throw IllegalArgumentException(message)
     }
 }
 
-fun checkIsBucketUrlRight(url: String?) {
+internal fun checkIsBucketUrlRight(url: String?) {
     if (url == null) {
         return
     }
@@ -15,4 +15,4 @@ fun checkIsBucketUrlRight(url: String?) {
     }
 }
 
-fun checkIsFirebaseStorageEnabled(bucketUrl: String?): Boolean = bucketUrl != null
+internal fun checkIsFirebaseStorageEnabled(bucketUrl: String?): Boolean = bucketUrl != null
