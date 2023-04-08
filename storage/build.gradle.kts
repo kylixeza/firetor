@@ -34,8 +34,8 @@ kotlin {
 publishing {
     publications {
         create<MavenPublication>("maven") {
-            groupId = "com.kylix"
-            artifactId = "firetor"
+            groupId = "com.kylix.firetor.storage"
+            artifactId = "firetor-storage"
             version = "0.1.0"
             from(components["java"])
         }

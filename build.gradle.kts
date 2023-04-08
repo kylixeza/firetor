@@ -29,6 +29,7 @@ dependencies {
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
 }
 
+/*
 publishing {
     publications {
         create<MavenPublication>("maven") {
@@ -38,4 +39,4 @@ publishing {
             from(components["java"])
         }
     }
-}
+}*/
