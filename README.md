@@ -71,7 +71,7 @@ fun Application.module() {
 
 ## Features
 
-- ### [Firebase Storage](example.com)
+- ### [Firebase Storage](https://github.com/KylixEza/firetor/blob/release/storage/README.md)
 
 - ### Firebase Auth (TBA)
 
