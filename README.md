@@ -5,7 +5,7 @@
 # Firetor
 Firetor is Ktor plugin to help you simplified connecting to firebase admin
 
-# Dependency
+## Dependency
 
 Firetor was distributed through jitpack and this sample is using gradle.kts file. 
 
@@ -27,7 +27,7 @@ dependencies {
 `firetor_version` depends on released tag, you can check released tag in jitpack banner above.
 
 
-# Setup
+## Setup
 
 This is some steps to configure Firetor:
 
@@ -69,9 +69,27 @@ fun Application.module() {
 }
 ```
 
-
 ## Features
 
-- [Firebase Storage](example.com)
-- Firebase Auth
-- Firebase Realtime DB
+- ### [Firebase Storage](example.com)
+
+- ### Firebase Auth (TBA)
+
+- ### Firebase Realtime DB (TBA)
+
+## Contributing
+
+Please fork this repository and contribute back using pull request.
+
+Any contributions, large or small, major features, bug fixes, are welcomed and appreciated
+but will be thoroughly reviewed .
+
+## Contact
+<a href="https://linkedin.com/in/kylix-eza-saputra-1bb1b7192" target="blank"><img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/linked-in-alt.svg" alt="kylix-eza-saputra-1bb1b7192" height="30" width="40" /></a>
+<a href="https://instagram.com/k_ylix" target="blank"><img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/instagram.svg" alt="k_ylix" height="30" width="40" /></a>
+<a href="https://discord.gg/#Kylix3272" target="blank"><img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/discord.svg" alt="#Kylix3272" height="30" width="40" /></a>
+</p>
+
+<p>
+Don't forget to ⭐ this repository to motivates me to share more open source library
+</p>
