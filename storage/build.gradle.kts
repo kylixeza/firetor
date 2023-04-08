@@ -1,6 +1,7 @@
 plugins {
     id("java")
     kotlin("jvm") version "1.8.20"
+    `maven-publish`
 }
 
 group = "com.kylix"
@@ -28,4 +29,15 @@ tasks.test {
 }
 kotlin {
     jvmToolchain(11)
+}
+
+publishing {
+    publications {
+        create<MavenPublication>("maven") {
+            groupId = "com.kylix"
+            artifactId = "firetor"
+            version = "0.1.0"
+            from(components["java"])
+        }
+    }
 }
