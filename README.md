@@ -1,3 +1,7 @@
+[![](https://jitpack.io/v/KylixEza/firetor.svg)](https://jitpack.io/#KylixEza/firetor)
+[![License](https://img.shields.io/badge/license-Apache%20License%202.0-blue.svg?style=flat)](http://www.apache.org/licenses/LICENSE-2.0)
+
+
 <div align="center">
 <img width="40%" height = "40%" src="https://user-images.githubusercontent.com/58837451/230625789-8d64b4a0-2d54-446c-81b5-6facd383c5db.png" />
 </div>
