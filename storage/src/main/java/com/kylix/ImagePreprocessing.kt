@@ -9,6 +9,7 @@ class ImagePreprocessing(private val imageExtension: ImageExtension) {
 
     fun ByteArray.compress(quality: Float): ByteArray = run {
         var image = ImageIO.read(ByteArrayInputStream(this))
+        val isRawImagePortrait = this.isImagePortrait()
         val outputStream = ByteArrayOutputStream()
         val writer = ImageIO.getImageWritersByFormatName(imageExtension.extension).next()
         val params = writer.defaultWriteParam
@@ -25,7 +26,13 @@ class ImagePreprocessing(private val imageExtension: ImageExtension) {
 
         writer.write(null, javax.imageio.IIOImage(image, null, null), params)
         imageOutputStream.close()
-        outputStream.toByteArray()
+        val compressedImage = outputStream.toByteArray()
+
+        if (isRawImagePortrait) {
+            compressedImage.rotate(90.0)
+        } else {
+            compressedImage
+        }
     }
     private fun BufferedImage.removeAlphaChannel(): BufferedImage {
         if (!colorModel.hasAlpha()) {
@@ -41,6 +48,12 @@ class ImagePreprocessing(private val imageExtension: ImageExtension) {
 
     private fun createImage(width: Int, height: Int, hasNoAlpha: Boolean) = run {
         BufferedImage(width, height, if (hasNoAlpha) BufferedImage.TYPE_INT_ARGB else BufferedImage.TYPE_INT_RGB)
+    }
+
+    private fun ByteArray.isImagePortrait(): Boolean {
+        val inputStream = ByteArrayInputStream(this)
+        val originalImage = ImageIO.read(inputStream)
+        return originalImage.height > originalImage.width
     }
 
     fun ByteArray.resize(newWidth: Int, newHeight: Int): ByteArray {
