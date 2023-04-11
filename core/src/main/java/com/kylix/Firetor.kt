@@ -39,7 +39,7 @@ class Firetor(configuration: Configuration) {
         }
 
         private fun getServiceAccount(adminKeyFileName: String?) = run {
-            checkNotNull(adminKeyFileName, "Admin key file name must not be null")
+            checkNotNull(adminKeyFileName, "Admin key file name must not be null, set admin key file using setAdminKey()")
             this::class.java.classLoader.getResourceAsStream(adminKeyFileName)
         }
 
