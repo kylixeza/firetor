@@ -21,6 +21,8 @@ dependencies {
     implementation("com.google.firebase:firebase-admin:9.1.1")
     implementation(kotlin("stdlib-jdk8"))
 
+    implementation("com.drewnoakes:metadata-extractor:2.18.0")
+
     implementation(project(":core"))
 }
 
