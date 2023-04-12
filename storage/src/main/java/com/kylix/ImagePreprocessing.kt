@@ -67,9 +67,9 @@ class ImagePreprocessing(private val imageExtension: ImageExtension, private val
         val bufferedImage = BufferedImage(originalImage.width, originalImage.height, BufferedImage.TYPE_INT_RGB)
 
         if (isImagePortrait) {
-            bufferedImage.graphics.drawImage(originalImage, 0, 0, originalImage.width, originalImage.height, 0, originalImage.height, originalImage.width, 0, null)
-        } else {
             bufferedImage.graphics.drawImage(originalImage, 0, 0, originalImage.width, originalImage.height, originalImage.width, 0, 0, originalImage.height, null)
+        } else {
+            bufferedImage.graphics.drawImage(originalImage, 0, 0, originalImage.width, originalImage.height, 0, originalImage.height, originalImage.width, 0, null)
         }
 
         val outputStream = ByteArrayOutputStream()
@@ -83,9 +83,9 @@ class ImagePreprocessing(private val imageExtension: ImageExtension, private val
         val bufferedImage = BufferedImage(originalImage.width, originalImage.height, BufferedImage.TYPE_INT_RGB)
 
         if (isImagePortrait) {
-            bufferedImage.graphics.drawImage(originalImage, 0, 0, originalImage.width, originalImage.height, originalImage.width, 0, 0, originalImage.height, null)
-        } else {
             bufferedImage.graphics.drawImage(originalImage, 0, 0, originalImage.width, originalImage.height, 0, originalImage.height, originalImage.width, 0, null)
+        } else {
+            bufferedImage.graphics.drawImage(originalImage, 0, 0, originalImage.width, originalImage.height, originalImage.width, 0, 0, originalImage.height, null)
         }
 
         val outputStream = ByteArrayOutputStream()
