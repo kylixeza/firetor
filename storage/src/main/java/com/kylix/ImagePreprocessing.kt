@@ -61,7 +61,7 @@ class ImagePreprocessing(private val imageExtension: ImageExtension, private val
         return outputStream.toByteArray()
     }
 
-    private fun ByteArray.flipVertical(): ByteArray = run {
+    fun ByteArray.flipVertical(): ByteArray = run {
         val inputStream = ByteArrayInputStream(this)
         val originalImage = ImageIO.read(inputStream)
         val bufferedImage = BufferedImage(originalImage.width, originalImage.height, BufferedImage.TYPE_INT_RGB)
@@ -77,7 +77,7 @@ class ImagePreprocessing(private val imageExtension: ImageExtension, private val
         outputStream.toByteArray()
     }
 
-    private fun ByteArray.flipHorizontal(): ByteArray = run {
+    fun ByteArray.flipHorizontal(): ByteArray = run {
         val inputStream = ByteArrayInputStream(this)
         val originalImage = ImageIO.read(inputStream)
         val bufferedImage = BufferedImage(originalImage.width, originalImage.height, BufferedImage.TYPE_INT_RGB)
