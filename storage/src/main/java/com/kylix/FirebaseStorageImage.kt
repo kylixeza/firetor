@@ -22,7 +22,7 @@ object FirebaseStorageImage {
         val fileBytes = streamProvider().readBytes()
         val isRawImagePortrait = fileBytes.isPortraitImage()
 
-        val imagePipeline = ImagePreprocessing(fileExtension)
+        val imagePipeline = ImagePreprocessing(fileExtension, isRawImagePortrait)
         val processedImage = imagePipeline.preprocessing(fileBytes)
         val normalizedImage = if (isRawImagePortrait) {
             imagePipeline.run { processedImage.rotate(90.0) }

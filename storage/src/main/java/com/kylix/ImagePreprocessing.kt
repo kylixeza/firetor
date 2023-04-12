@@ -1,5 +1,7 @@
 package com.kylix
 
+import com.drew.imaging.ImageMetadataReader
+import com.drew.metadata.exif.ExifIFD0Directory
 import java.awt.Graphics2D
 import java.awt.geom.AffineTransform
 import java.awt.image.BufferedImage
@@ -10,7 +12,7 @@ import kotlin.math.abs
 import kotlin.math.cos
 import kotlin.math.sin
 
-class ImagePreprocessing(private val imageExtension: ImageExtension) {
+class ImagePreprocessing(private val imageExtension: ImageExtension, private val isImagePortrait: Boolean) {
 
     fun ByteArray.compress(quality: Float): ByteArray = run {
         var image = ImageIO.read(ByteArrayInputStream(this))
@@ -48,12 +50,6 @@ class ImagePreprocessing(private val imageExtension: ImageExtension) {
         BufferedImage(width, height, if (hasNoAlpha) BufferedImage.TYPE_INT_ARGB else BufferedImage.TYPE_INT_RGB)
     }
 
-    private fun ByteArray.isImagePortrait(): Boolean {
-        val inputStream = ByteArrayInputStream(this)
-        val originalImage = ImageIO.read(inputStream)
-        return originalImage.height > originalImage.width
-    }
-
     fun ByteArray.resize(newWidth: Int, newHeight: Int): ByteArray {
         val inputStream = ByteArrayInputStream(this)
         val originalImage = ImageIO.read(inputStream)
@@ -65,14 +61,36 @@ class ImagePreprocessing(private val imageExtension: ImageExtension) {
         return outputStream.toByteArray()
     }
 
-    fun ByteArray.flipVertical(): ByteArray = run {
+    private fun ByteArray.flipVertical(): ByteArray = run {
         val inputStream = ByteArrayInputStream(this)
         val originalImage = ImageIO.read(inputStream)
         val bufferedImage = BufferedImage(originalImage.width, originalImage.height, BufferedImage.TYPE_INT_RGB)
-        bufferedImage.graphics.drawImage(originalImage, 0, 0, originalImage.width, originalImage.height, 0, originalImage.height, originalImage.width, 0, null)
+
+        if (isImagePortrait) {
+            bufferedImage.graphics.drawImage(originalImage, 0, 0, originalImage.width, originalImage.height, 0, originalImage.height, originalImage.width, 0, null)
+        } else {
+            bufferedImage.graphics.drawImage(originalImage, 0, 0, originalImage.width, originalImage.height, originalImage.width, 0, 0, originalImage.height, null)
+        }
+
         val outputStream = ByteArrayOutputStream()
         ImageIO.write(bufferedImage, imageExtension.extension, outputStream)
-        return@run outputStream.toByteArray()
+        outputStream.toByteArray()
+    }
+
+    private fun ByteArray.flipHorizontal(): ByteArray = run {
+        val inputStream = ByteArrayInputStream(this)
+        val originalImage = ImageIO.read(inputStream)
+        val bufferedImage = BufferedImage(originalImage.width, originalImage.height, BufferedImage.TYPE_INT_RGB)
+
+        if (isImagePortrait) {
+            bufferedImage.graphics.drawImage(originalImage, 0, 0, originalImage.width, originalImage.height, originalImage.width, 0, 0, originalImage.height, null)
+        } else {
+            bufferedImage.graphics.drawImage(originalImage, 0, 0, originalImage.width, originalImage.height, 0, originalImage.height, originalImage.width, 0, null)
+        }
+
+        val outputStream = ByteArrayOutputStream()
+        ImageIO.write(bufferedImage, imageExtension.extension, outputStream)
+        outputStream.toByteArray()
     }
 
     fun ByteArray.rotate(degrees: Double): ByteArray = run {
@@ -94,16 +112,6 @@ class ImagePreprocessing(private val imageExtension: ImageExtension) {
         val outputStream = ByteArrayOutputStream()
         ImageIO.write(rotatedImage, imageExtension.extension, outputStream)
         return outputStream.toByteArray()
-    }
-
-    fun ByteArray.flipHorizontal(): ByteArray = run {
-        val inputStream = ByteArrayInputStream(this)
-        val originalImage = ImageIO.read(inputStream)
-        val bufferedImage = BufferedImage(originalImage.width, originalImage.height, BufferedImage.TYPE_INT_RGB)
-        bufferedImage.graphics.drawImage(originalImage, 0, 0, originalImage.width, originalImage.height, originalImage.width, 0, 0, originalImage.height, null)
-        val outputStream = ByteArrayOutputStream()
-        ImageIO.write(bufferedImage, imageExtension.extension, outputStream)
-        return@run outputStream.toByteArray()
     }
 
 }
