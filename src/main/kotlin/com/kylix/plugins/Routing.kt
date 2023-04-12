@@ -41,7 +41,7 @@ fun Application.configureRouting() {
                             path = "images",
                             fileExtension = ImageExtension.JPG,
                             preprocessing = {
-                                it.compress(0.9f)
+                                it
                             }
                         )
                     }
