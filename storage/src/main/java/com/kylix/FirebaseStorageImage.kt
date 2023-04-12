@@ -1,6 +1,8 @@
 package com.kylix
 
 import com.aventrix.jnanoid.jnanoid.NanoIdUtils
+import com.drew.imaging.ImageMetadataReader
+import com.drew.metadata.exif.ExifIFD0Directory
 import com.google.firebase.cloud.StorageClient
 import com.kylix.URLBuilder.getDownloadUrl
 import com.kylix.URLBuilder.reference
@@ -18,7 +20,7 @@ object FirebaseStorageImage {
         preprocessing: ImagePreprocessing.(ByteArray) -> ByteArray = { it }
     ) = run {
         val fileBytes = streamProvider().readBytes()
-        val isRawImagePortrait = this.isPortraitImage()
+        val isRawImagePortrait = fileBytes.isPortraitImage()
 
         val imagePipeline = ImagePreprocessing(fileExtension)
         val processedImage = imagePipeline.preprocessing(fileBytes)
@@ -43,10 +45,12 @@ object FirebaseStorageImage {
         }
     }
 
-    private fun PartData.FileItem.isPortraitImage(): Boolean = run {
-        val inputStream = ByteArrayInputStream(this.streamProvider().readBytes())
-        val image = ImageIO.read(inputStream)
-        image.height > image.width
+    private fun ByteArray.isPortraitImage(): Boolean = run {
+        val inputStream = ByteArrayInputStream(this)
+        val metadata = ImageMetadataReader.readMetadata(inputStream)
+        val directory = metadata.getFirstDirectoryOfType(ExifIFD0Directory::class.java)
+        val orientation = directory?.getInt(ExifIFD0Directory.TAG_ORIENTATION) ?: 0
+        return orientation == 6 || orientation == 8
     }
 
 }
