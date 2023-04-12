@@ -57,9 +57,9 @@ fun Application.configureFiretor() {
 
 | Function      | Parameters    | Parameter Type | Example | Mandatory |
 | ------------- |:-------------:| :------------: | :-----: | :-------: |
-| `setAdminKey()` | fileName | String | "firetor-sample-admin-key.json" | Yes |
-| `enableFirebaseStorage()` | bucketUrl | String | "firetor-sample.appspot.com" | No |
-| `setBasicConfiguration()` | config | FirbaseOptions.Builder.() -> FirebaseOptions.Builder? | setDatabaseUrl("") | No |
+| `setAdminKey()` | fileName | String | `"firetor-sample-admin-key.json"` | Yes |
+| `enableFirebaseStorage()` | bucketUrl | String | `"firetor-sample.appspot.com"` | No |
+| `setBasicConfiguration()` | config | FirbaseOptions.Builder.() -> FirebaseOptions.Builder? | `this.setConnectTimeout(10000).setDatabaseUrl("https://firetor.firebaseio.com").setReadTimeout(10000)` | No |
 
 `Application.kt`
 ```kotlin
