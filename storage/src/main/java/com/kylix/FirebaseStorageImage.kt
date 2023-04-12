@@ -8,7 +8,6 @@ import com.kylix.URLBuilder.getDownloadUrl
 import com.kylix.URLBuilder.reference
 import io.ktor.http.content.*
 import java.io.ByteArrayInputStream
-import javax.imageio.ImageIO
 
 object FirebaseStorageImage {
 
