@@ -33,6 +33,8 @@ For now, Firetor just provide feature to upload single image to your storage but
 
 ### Image
 
+Example 1:
+
 ```kotlin
 post("/image") {
     var url: String? = null
@@ -50,6 +52,8 @@ post("/image") {
     }
 }
 ```
+
+Example 2:
 
 ```kotlin
 post("/image-with-params") {
@@ -84,7 +88,7 @@ post("/image-with-params") {
 | :------: | :--: | :---: | :-----------: | :-----: |
 | `path` | `String` | To declare path of your image directory. If directory is null, it will be placed at default directory in storage | `null` | `"user/avatar"` |
 | `imageExtension` | `ImageExtension` | To declare extension of your image | `ImageExtension.JPG` | `ImageExtension.JPEG` |
-| `imagePreprocessing` | `ImagePreprocessing.(ByteArray) -> ByteArray` | To preprocessing image before uploaded | `this` | `it.compress(0.5f)` |
+| `imagePreprocessing` | `ImagePreprocessing.(ByteArray) -> ByteArray` | To preprocessing image before uploaded | `it` | `it.compress(0.5f)` |
 
 Here some ImagePreprocessing functions:
 | Function | Parameters | Usage |
