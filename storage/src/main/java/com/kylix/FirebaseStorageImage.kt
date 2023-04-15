@@ -1,6 +1,5 @@
 package com.kylix
 
-import com.aventrix.jnanoid.jnanoid.NanoIdUtils
 import com.drew.imaging.ImageMetadataReader
 import com.drew.metadata.exif.ExifIFD0Directory
 import com.google.firebase.cloud.StorageClient
@@ -20,8 +19,9 @@ object FirebaseStorageImage {
     ) = run {
         val fileBytes = streamProvider().readBytes()
         val isRawImagePortrait = fileBytes.isPortraitImage()
+        val originalFileName = this.originalFileName
 
-        val imagePipeline = ImagePreprocessing(fileExtension, isRawImagePortrait)
+        val imagePipeline = ImagePreprocessing(fileExtension, isRawImagePortrait, originalFileName)
         val processedImage = imagePipeline.preprocessing(fileBytes)
         val normalizedImage = if (isRawImagePortrait) {
             imagePipeline.run { processedImage.rotate(90.0) }
@@ -29,12 +29,18 @@ object FirebaseStorageImage {
             processedImage
         }
 
-        val fileName = NanoIdUtils.randomNanoId() + "." + fileExtension.extension
+        val fileName = imagePipeline.getFileName()
+
+        val contentType = when (fileExtension) {
+            ImageExtension.ORIGINAL_FILE_EXTENSION -> "image/${originalFileName?.split(".")?.last()}"
+            else -> "image/${fileExtension.extension}"
+        }
+
         if (path == null) {
-            bucket.create(fileName, normalizedImage, "image/${fileExtension.extension}")
+            bucket.create(fileName, normalizedImage, contentType)
             return@run URLBuilder.initPath().getDownloadUrl(fileName)
         } else {
-            bucket.create("$path/$fileName", normalizedImage, "image/${fileExtension.extension}")
+            bucket.create("$path/$fileName", normalizedImage, contentType)
             var url = URLBuilder.initPath()
             val paths = path.split("/")
             paths.forEach { path ->
