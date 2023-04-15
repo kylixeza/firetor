@@ -1,5 +1,6 @@
 package com.kylix
 
+import com.aventrix.jnanoid.jnanoid.NanoIdUtils
 import java.awt.Graphics2D
 import java.awt.geom.AffineTransform
 import java.awt.image.BufferedImage
@@ -10,7 +11,21 @@ import kotlin.math.abs
 import kotlin.math.cos
 import kotlin.math.sin
 
-class ImagePreprocessing(private val imageExtension: ImageExtension, private val isImagePortrait: Boolean) {
+class ImagePreprocessing(
+    private val imageExtension: ImageExtension,
+    private val isImagePortrait: Boolean,
+    private val originalFileName: String?,
+) {
+
+    private val extension = if (imageExtension == ImageExtension.ORIGINAL_FILE_EXTENSION) {
+        originalFileName?.substringAfterLast(".") ?: "jpg"
+    } else {
+        imageExtension.extension
+    }
+
+    private var fileName = NanoIdUtils.randomNanoId() + ".$extension"
+
+    fun getFileName(): String = fileName
 
     fun ByteArray.compress(quality: Float): ByteArray = run {
         var image = ImageIO.read(ByteArrayInputStream(this))
@@ -110,6 +125,21 @@ class ImagePreprocessing(private val imageExtension: ImageExtension, private val
         val outputStream = ByteArrayOutputStream()
         ImageIO.write(rotatedImage, imageExtension.extension, outputStream)
         return outputStream.toByteArray()
+    }
+
+    fun ByteArray.renameWithOriginalName(includeTimeStamp: Boolean = false): ByteArray {
+        fileName = originalFileName?.substringBeforeLast(".") + if (includeTimeStamp) "_${System.currentTimeMillis()}." else ".$extension"
+        return this
+    }
+
+    fun ByteArray.rename(customName: String, includeTimeStamp: Boolean = false): ByteArray {
+        fileName = customName + if (includeTimeStamp) "_${System.currentTimeMillis()}" else ".$extension"
+        return this
+    }
+
+    fun ByteArray.renameWithRandomId(includeTimeStamp: Boolean = false): ByteArray {
+        fileName = NanoIdUtils.randomNanoId() + if (includeTimeStamp) "_${System.currentTimeMillis()}" else ".$extension"
+        return this
     }
 
 }
