@@ -15,7 +15,7 @@ object FirebaseStorageImage {
 
     fun PartData.FileItem.uploadImage(
         path: String? = null,
-        fileExtension: ImageExtension = ImageExtension.JPG,
+        fileExtension: ImageExtension = ImageExtension.ORIGINAL_FILE_EXTENSION,
         preprocessing: ImagePreprocessing.(ByteArray) -> ByteArray = { it }
     ) = run {
         val fileBytes = streamProvider().readBytes()
