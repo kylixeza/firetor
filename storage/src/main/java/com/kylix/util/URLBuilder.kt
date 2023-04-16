@@ -1,4 +1,6 @@
-package com.kylix
+package com.kylix.util
+
+import com.kylix.Configuration
 
 object URLBuilder {
 

@@ -1,4 +1,4 @@
-package com.kylix
+package com.kylix.image
 
 import com.aventrix.jnanoid.jnanoid.NanoIdUtils
 import java.awt.Graphics2D

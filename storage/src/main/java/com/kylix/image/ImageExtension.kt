@@ -1,4 +1,4 @@
-package com.kylix
+package com.kylix.image
 
 enum class ImageExtension(val extension: String) {
     ORIGINAL_FILE_EXTENSION("original_file_extension"),

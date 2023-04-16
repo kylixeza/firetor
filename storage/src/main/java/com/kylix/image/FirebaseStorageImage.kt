@@ -1,10 +1,11 @@
-package com.kylix
+package com.kylix.image
 
 import com.drew.imaging.ImageMetadataReader
 import com.drew.metadata.exif.ExifIFD0Directory
 import com.google.firebase.cloud.StorageClient
-import com.kylix.URLBuilder.getDownloadUrl
-import com.kylix.URLBuilder.reference
+import com.kylix.util.URLBuilder
+import com.kylix.util.URLBuilder.getDownloadUrl
+import com.kylix.util.URLBuilder.reference
 import io.ktor.http.content.*
 import java.io.ByteArrayInputStream
 
