@@ -1,5 +1,6 @@
-package com.kylix
+package com.kylix.image
 
+import com.aventrix.jnanoid.jnanoid.NanoIdUtils
 import java.awt.Graphics2D
 import java.awt.geom.AffineTransform
 import java.awt.image.BufferedImage
@@ -10,12 +11,26 @@ import kotlin.math.abs
 import kotlin.math.cos
 import kotlin.math.sin
 
-class ImagePreprocessing(private val imageExtension: ImageExtension, private val isImagePortrait: Boolean) {
+class ImagePreprocessing(
+    private val imageExtension: ImageExtension,
+    private val isImagePortrait: Boolean,
+    private val originalFileName: String?,
+) {
+
+    private val extension = if (imageExtension == ImageExtension.ORIGINAL_FILE_EXTENSION) {
+        originalFileName?.substringAfterLast(".") ?: "jpg"
+    } else {
+        imageExtension.extension
+    }
+
+    private var fileName = NanoIdUtils.randomNanoId() + ".$extension"
+
+    fun getFileName(): String = fileName
 
     fun ByteArray.compress(quality: Float): ByteArray = run {
         var image = ImageIO.read(ByteArrayInputStream(this))
         val outputStream = ByteArrayOutputStream()
-        val writer = ImageIO.getImageWritersByFormatName(imageExtension.extension).next()
+        val writer = ImageIO.getImageWritersByFormatName(extension).next()
         val params = writer.defaultWriteParam
         params.compressionMode = javax.imageio.ImageWriteParam.MODE_EXPLICIT
         params.compressionQuality = quality
@@ -55,7 +70,7 @@ class ImagePreprocessing(private val imageExtension: ImageExtension, private val
         val bufferedImage = BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_RGB)
         bufferedImage.graphics.drawImage(resizedImage, 0, 0, null)
         val outputStream = ByteArrayOutputStream()
-        ImageIO.write(bufferedImage, imageExtension.extension, outputStream)
+        ImageIO.write(bufferedImage, extension, outputStream)
         return outputStream.toByteArray()
     }
 
@@ -71,7 +86,7 @@ class ImagePreprocessing(private val imageExtension: ImageExtension, private val
         }
 
         val outputStream = ByteArrayOutputStream()
-        ImageIO.write(bufferedImage, imageExtension.extension, outputStream)
+        ImageIO.write(bufferedImage, extension, outputStream)
         outputStream.toByteArray()
     }
 
@@ -87,7 +102,7 @@ class ImagePreprocessing(private val imageExtension: ImageExtension, private val
         }
 
         val outputStream = ByteArrayOutputStream()
-        ImageIO.write(bufferedImage, imageExtension.extension, outputStream)
+        ImageIO.write(bufferedImage, extension, outputStream)
         outputStream.toByteArray()
     }
 
@@ -108,8 +123,23 @@ class ImagePreprocessing(private val imageExtension: ImageExtension, private val
         graphics.dispose()
 
         val outputStream = ByteArrayOutputStream()
-        ImageIO.write(rotatedImage, imageExtension.extension, outputStream)
+        ImageIO.write(rotatedImage, extension, outputStream)
         return outputStream.toByteArray()
+    }
+
+    fun ByteArray.renameWithOriginalName(includeTimeStamp: Boolean = false): ByteArray {
+        fileName = originalFileName?.substringBeforeLast(".") + if (includeTimeStamp) "_${System.currentTimeMillis()}.$extension" else ".$extension"
+        return this
+    }
+
+    fun ByteArray.rename(customName: String, includeTimeStamp: Boolean = false): ByteArray {
+        fileName = customName + if (includeTimeStamp) "_${System.currentTimeMillis()}.$extension" else ".$extension"
+        return this
+    }
+
+    fun ByteArray.renameWithRandomId(includeTimeStamp: Boolean = false): ByteArray {
+        fileName = NanoIdUtils.randomNanoId() + if (includeTimeStamp) "_${System.currentTimeMillis()}.$extension" else ".$extension"
+        return this
     }
 
 }
