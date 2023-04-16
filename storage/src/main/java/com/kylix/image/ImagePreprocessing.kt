@@ -30,7 +30,7 @@ class ImagePreprocessing(
     fun ByteArray.compress(quality: Float): ByteArray = run {
         var image = ImageIO.read(ByteArrayInputStream(this))
         val outputStream = ByteArrayOutputStream()
-        val writer = ImageIO.getImageWritersByFormatName(imageExtension.extension).next()
+        val writer = ImageIO.getImageWritersByFormatName(extension).next()
         val params = writer.defaultWriteParam
         params.compressionMode = javax.imageio.ImageWriteParam.MODE_EXPLICIT
         params.compressionQuality = quality
@@ -70,7 +70,7 @@ class ImagePreprocessing(
         val bufferedImage = BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_RGB)
         bufferedImage.graphics.drawImage(resizedImage, 0, 0, null)
         val outputStream = ByteArrayOutputStream()
-        ImageIO.write(bufferedImage, imageExtension.extension, outputStream)
+        ImageIO.write(bufferedImage, extension, outputStream)
         return outputStream.toByteArray()
     }
 
@@ -86,7 +86,7 @@ class ImagePreprocessing(
         }
 
         val outputStream = ByteArrayOutputStream()
-        ImageIO.write(bufferedImage, imageExtension.extension, outputStream)
+        ImageIO.write(bufferedImage, extension, outputStream)
         outputStream.toByteArray()
     }
 
@@ -102,7 +102,7 @@ class ImagePreprocessing(
         }
 
         val outputStream = ByteArrayOutputStream()
-        ImageIO.write(bufferedImage, imageExtension.extension, outputStream)
+        ImageIO.write(bufferedImage, extension, outputStream)
         outputStream.toByteArray()
     }
 
@@ -123,7 +123,7 @@ class ImagePreprocessing(
         graphics.dispose()
 
         val outputStream = ByteArrayOutputStream()
-        ImageIO.write(rotatedImage, imageExtension.extension, outputStream)
+        ImageIO.write(rotatedImage, extension, outputStream)
         return outputStream.toByteArray()
     }
 
