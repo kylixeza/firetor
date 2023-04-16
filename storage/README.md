@@ -1,5 +1,12 @@
 # Firebase Storage
 
+- [Firebase Storage](#firebase-storage)
+    * [Setup](#setup)
+    * [Features](#features)
+        + [Image](#image)
+        + [Document](#document)
+
+
 ## Setup
 - Enabled firebase storage in production level in your firebase project dashboard
 - Go to `Rules` tab and  changes read/write permission to true
@@ -23,15 +30,18 @@ service firebase.storage {
 ```kotlin
 fun Application.configureFiretor() {
     install(Firetor) {
-    ...
-    enableFirebaseStorage("project-id.appspot.com")
+        ...
+        enableFirebaseStorage("project-id.appspot.com")
+    }
 }
 ```
 
 ## Features
-For now, Firetor just provide feature to upload single image to your storage but it will be updated always to add some other features
+
 
 ### Image
+
+>>Supported image extension: `jpg`, `jpeg`, `png`, `gif`, `bmp`, `webp`, `tiff`
 
 Example 1:
 
@@ -57,44 +67,88 @@ Example 2:
 
 ```kotlin
 post("/image-with-params") {
-        var url: String? = null
-        val multipart = call.receiveMultipart()
+    var url: String? = null
+    val multipart = call.receiveMultipart()
 
-        try {
-            multipart.forEachPart { part ->
-                if (part is PartData.FileItem) {
-                    url = part.uploadImage(
-                        "images",
-                        ImageExtension.JPG,
-                    ) {
-                        it.compress(0.5f)
-                            .flipHorizontal()
-                            .flipVertical()
-                            .rotate(45.0)
-                            .resize(100, 100)
-                    }
+    try {
+        multipart.forEachPart { part ->
+            if (part is PartData.FileItem) {
+                url = part.uploadImage(
+                    "images",
+                    ImageExtension.JPG,
+                ) {
+                    it.compress(0.5f)
+                        .flipHorizontal()
+                        .flipVertical()
+                        .rotate(45.0)
+                        .resize(100, 100)
                 }
             }
-            call.respond(HttpStatusCode.OK, url ?: "No image url fetched")
-        } catch (e: Exception) {
-            call.respondText("Error: ${e.message}")
         }
+        call.respond(HttpStatusCode.OK, url ?: "No image url fetched")
+    } catch (e: Exception) {
+        call.respondText("Error: ${e.message}")
     }
 }
 ```
 
 
-| Parameter | Type | Usage | Default Value | Example |
-| :------: | :--: | :---: | :-----------: | :-----: |
-| `path` | `String` | To declare path of your image directory. If directory is null, it will be placed at default directory in storage | `null` | `"user/avatar"` |
-| `imageExtension` | `ImageExtension` | To declare extension of your image | `ImageExtension.JPG` | `ImageExtension.JPEG` |
-| `imagePreprocessing` | `ImagePreprocessing.(ByteArray) -> ByteArray` | To preprocessing image before uploaded | `it` | `it.compress(0.5f)` |
+|      Parameter       |                     Type                      |                                                      Usage                                                       |              Default Value               |        Example        |
+|:--------------------:|:---------------------------------------------:|:----------------------------------------------------------------------------------------------------------------:|:----------------------------------------:|:---------------------:|
+|        `path`        |                   `String`                    | To declare path of your image directory. If directory is null, it will be placed at default directory in storage |                  `null`                  |    `"user/avatar"`    |
+|   `imageExtension`   |               `ImageExtension`                |                                        To declare extension of your image                                        | `ImageExtension.ORIGINAL_FILE_EXTENSION` | `ImageExtension.JPEG` |
+| `imagePreprocessing` | `ImagePreprocessing.(ByteArray) -> ByteArray` |                                      To preprocessing image before uploaded                                      |                   `it`                   |  `it.compress(0.5f)`  |
 
 Here some ImagePreprocessing functions:
-| Function | Parameters | Usage |
-| :------: | :-------: | :---: |
-| `compress()` | Float | To compress image quality (lossless compression) |
-| `rotate()` | Double | To rotate image (clockwise direction) |
-| `resize()` | Int, Int | To resized image in pixels |
-| `flipVertical()` | - | To flip image vertically |
-| `filpHorizontal()` | - | To flip image horizontally |
+
+|          Function          |   Parameters    |  Default Value  |                      Usage                       |
+|:--------------------------:|:---------------:|:---------------:|:------------------------------------------------:|
+|        `compress()`        |      Float      |        -        | To compress image quality (lossless compression) |
+|         `rotate()`         |     Double      |        -        |      To rotate image (clockwise direction)       |
+|         `resize()`         |    Int, Int     |      -, -       |            To resized image in pixels            |
+|      `flipVertical()`      |        -        |                 |             To flip image vertically             |
+|     `filpHorizontal()`     |        -        |                 |            To flip image horizontally            |
+|         `rename()`         | String, Boolean |   -, `false`    |         To rename image to spesific name         |
+| `renameWithOriginalName()` |     Boolean     |     `false`     |         To rename image to original name         |
+|   `renameWithRandomId()`   |     Boolean     |     `false`     |           To rename image to random id           |
+
+### Document
+
+>>Supported document extension: `pdf`, `doc`, `docx`, `xls`, `xlsx`, `ppt`, `pptx`, `txt`
+
+Example :
+
+```kotlin
+
+post("/upload-document") {
+    val multipart = call.receiveMultipart()
+    var url: String? = null
+
+    try {
+        multipart.forEachPart {part ->
+            if (part is PartData.FileItem) {
+                url = part.uploadDocument("documents") {
+                    it.renameWithOriginalName(true)
+                }
+            }
+            part.dispose()
+        }
+        call.respond(url ?: "No document uploaded")
+    } catch (e: Exception) {
+        call.respondText("Error: ${e.message}")
+    }
+}
+```
+
+|  Parameter   |                       Type                       |                                                        Usage                                                        |              Default Value               |               Example                |
+|:------------:|:------------------------------------------------:|:-------------------------------------------------------------------------------------------------------------------:|:----------------------------------------:|:------------------------------------:|
+|    `path`    |                     `String`                     | To declare path of your document directory. If directory is null, it will be placed at default directory in storage |                  `null`                  |           `"user/reports"`           |
+| `preprocess` | `DocumentPreprocessing.(ByteArray) -> ByteArray` |                                      To preprocessing document before uploaded                                      |                   `it`                   | `it.renameWithOrignalFileNmae(true)` |
+
+Here some DocumentPreprocessing functions:
+
+|          Function          |   Parameters    |  Default Value  |                      Usage                       |
+|:--------------------------:|:---------------:|:---------------:|:------------------------------------------------:|
+|         `rename()`         | String, Boolean |   -, `false`    |         To rename image to spesific name         |
+| `renameWithOriginalName()` |     Boolean     |     `false`     |         To rename image to original name         |
+|   `renameWithRandomId()`   |     Boolean     |     `false`     |           To rename image to random id           |
