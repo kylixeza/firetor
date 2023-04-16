@@ -11,6 +11,10 @@ import kotlin.math.abs
 import kotlin.math.cos
 import kotlin.math.sin
 
+/**
+ * This class is used to preprocess the image before it is stored in the database
+ * @author Kylix Eza Saputra
+ */
 class ImagePreprocessing(
     private val imageExtension: ImageExtension,
     private val isImagePortrait: Boolean,
@@ -27,6 +31,12 @@ class ImagePreprocessing(
 
     internal fun getFileName(): String = fileName
 
+    /**
+     * This function is used to compress quality of the image
+     * @param quality is used to set the quality of the image
+     * @return ByteArray
+     * @author Kylix Eza Saputra
+     */
     fun ByteArray.compress(quality: Float): ByteArray = run {
         var image = ImageIO.read(ByteArrayInputStream(this))
         val outputStream = ByteArrayOutputStream()
@@ -47,6 +57,7 @@ class ImagePreprocessing(
         imageOutputStream.close()
         outputStream.toByteArray()
     }
+
     private fun BufferedImage.removeAlphaChannel(): BufferedImage {
         if (!colorModel.hasAlpha()) {
             return createImage(width, height, true)
@@ -63,6 +74,13 @@ class ImagePreprocessing(
         BufferedImage(width, height, if (hasNoAlpha) BufferedImage.TYPE_INT_ARGB else BufferedImage.TYPE_INT_RGB)
     }
 
+    /**
+     * This function is used to resize the image
+     * @param newWidth is used to set the new width of the image
+     * @param newHeight is used to set the new height of the image
+     * @return ByteArray
+     * @author Kylix Eza Saputra
+     */
     fun ByteArray.resize(newWidth: Int, newHeight: Int): ByteArray {
         val inputStream = ByteArrayInputStream(this)
         val originalImage = ImageIO.read(inputStream)
@@ -74,6 +92,11 @@ class ImagePreprocessing(
         return outputStream.toByteArray()
     }
 
+    /**
+     * This function is used to flip the image vertically
+     * @return ByteArray
+     * @author Kylix Eza Saputra
+     */
     fun ByteArray.flipVertical(): ByteArray = run {
         val inputStream = ByteArrayInputStream(this)
         val originalImage = ImageIO.read(inputStream)
@@ -90,6 +113,11 @@ class ImagePreprocessing(
         outputStream.toByteArray()
     }
 
+    /**
+     * This function is used to flip the image horizontally
+     * @return ByteArray
+     * @author Kylix Eza Saputra
+     */
     fun ByteArray.flipHorizontal(): ByteArray = run {
         val inputStream = ByteArrayInputStream(this)
         val originalImage = ImageIO.read(inputStream)
@@ -106,6 +134,12 @@ class ImagePreprocessing(
         outputStream.toByteArray()
     }
 
+    /**
+     * This function is used to rotate the image
+     * @param degrees is used to set the degrees of the image
+     * @return ByteArray
+     * @author Kylix Eza Saputra
+     */
     fun ByteArray.rotate(degrees: Double): ByteArray = run {
         val inputStream = ByteArrayInputStream(this)
         val originalImage = ImageIO.read(inputStream)
@@ -127,16 +161,35 @@ class ImagePreprocessing(
         return outputStream.toByteArray()
     }
 
+    /**
+     * This function is used to rename image file name with original name
+     * @param includeTimeStamp is used to set whether the timestamp will be included or not
+     * @return ByteArray
+     * @author Kylix Eza Saputra
+     */
     fun ByteArray.renameWithOriginalName(includeTimeStamp: Boolean = false): ByteArray {
         fileName = originalFileName?.substringBeforeLast(".") + if (includeTimeStamp) "_${System.currentTimeMillis()}.$extension" else ".$extension"
         return this
     }
 
+    /**
+     * This function is used to rename image file name with custom name
+     * @param customName is used to set the custom name of the image
+     * @param includeTimeStamp is used to set whether the timestamp will be included or not
+     * @return ByteArray
+     * @author Kylix Eza Saputra
+     */
     fun ByteArray.rename(customName: String, includeTimeStamp: Boolean = false): ByteArray {
         fileName = customName + if (includeTimeStamp) "_${System.currentTimeMillis()}.$extension" else ".$extension"
         return this
     }
 
+    /**
+     * This function is used to rename image file name with random id
+     * @param includeTimeStamp is used to set whether the timestamp will be included or not
+     * @return ByteArray
+     * @author Kylix Eza Saputra
+     */
     fun ByteArray.renameWithRandomId(includeTimeStamp: Boolean = false): ByteArray {
         fileName = NanoIdUtils.randomNanoId() + if (includeTimeStamp) "_${System.currentTimeMillis()}.$extension" else ".$extension"
         return this

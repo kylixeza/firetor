@@ -1,5 +1,9 @@
 package com.kylix.document
 
+/**
+ * This class is used to define the content type of the document
+ * @author Kylix Eza Saputra
+ */
 enum class DocumentContentType(
     internal val extension: String,
     internal val contentType: String

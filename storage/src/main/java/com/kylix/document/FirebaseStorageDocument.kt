@@ -6,10 +6,20 @@ import com.kylix.util.URLBuilder.getDownloadUrl
 import com.kylix.util.URLBuilder.reference
 import io.ktor.http.content.*
 
+/**
+ * This class is used to upload the document to the firebase storage
+ * @author Kylix Eza Saputra
+ */
 object FirebaseStorageDocument {
 
     private val bucket = StorageClient.getInstance().bucket()
 
+    /**
+     * This function is used to upload the document to the firebase storage
+     * @param path is used to set the path of the document
+     * @param preprocess is used to preprocess the document before it is stored in the database
+     * @return String
+     */
     fun PartData.FileItem.uploadDocument(
         path: String? = null,
         preprocess: DocumentPreprocessing.(ByteArray) -> ByteArray = { it }
