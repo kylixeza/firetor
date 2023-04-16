@@ -21,6 +21,7 @@ fun Route.postImage() {
                         it.compress(0.1f)
                     }
                 }
+                part.dispose()
             }
             call.respond(url ?: "No image uploaded")
         } catch (e: Exception) {
@@ -46,6 +47,7 @@ fun Route.postImage() {
                         }
                     )
                 }
+                part.dispose()
             }
             call.respond(url ?: "No image uploaded")
         } catch (e: Exception) {
