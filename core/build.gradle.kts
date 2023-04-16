@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "com.kylix"
-version = "0.1.0"
+version = "0.2.0"
 
 repositories {
     mavenCentral()
@@ -33,7 +33,7 @@ publishing {
         create<MavenPublication>("maven") {
             groupId = "com.kylix.firetor.core"
             artifactId = "firetor-core"
-            version = "0.1.0"
+            version = "0.2.0"
             from(components["java"])
         }
     }
