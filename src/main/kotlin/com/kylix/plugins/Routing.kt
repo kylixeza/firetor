@@ -1,5 +1,6 @@
 package com.kylix.plugins
 
+import com.kylix.routes.postDocument
 import com.kylix.routes.postImage
 import io.ktor.server.application.*
 import io.ktor.server.response.*
@@ -12,5 +13,6 @@ fun Application.configureRouting() {
         }
 
         this.postImage()
+        this.postDocument()
     }
 }
