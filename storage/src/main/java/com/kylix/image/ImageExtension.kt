@@ -1,6 +1,6 @@
 package com.kylix.image
 
-enum class ImageExtension(val extension: String) {
+enum class ImageExtension(internal val extension: String) {
     ORIGINAL_FILE_EXTENSION("original_file_extension"),
     JPG("jpg"),
     PNG("png"),

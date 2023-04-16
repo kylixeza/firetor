@@ -25,7 +25,7 @@ class ImagePreprocessing(
 
     private var fileName = NanoIdUtils.randomNanoId() + ".$extension"
 
-    fun getFileName(): String = fileName
+    internal fun getFileName(): String = fileName
 
     fun ByteArray.compress(quality: Float): ByteArray = run {
         var image = ImageIO.read(ByteArrayInputStream(this))
