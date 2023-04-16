@@ -37,9 +37,12 @@ fun Route.postImage() {
                 if (part is PartData.FileItem) {
                     url = part.uploadImage(
                         path = "images",
-                        fileExtension = ImageExtension.JPG,
+                        fileExtension = ImageExtension.ORIGINAL_FILE_EXTENSION,
                         preprocessing = {
-                            it.flipHorizontal()
+                            it.renameWithRandomId(true)
+                                .compress(0.1f)
+                                .renameWithOriginalName()
+                                .rename("mas bro v2", true)
                         }
                     )
                 }
