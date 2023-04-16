@@ -128,17 +128,17 @@ class ImagePreprocessing(
     }
 
     fun ByteArray.renameWithOriginalName(includeTimeStamp: Boolean = false): ByteArray {
-        fileName = originalFileName?.substringBeforeLast(".") + if (includeTimeStamp) "_${System.currentTimeMillis()}." else ".$extension"
+        fileName = originalFileName?.substringBeforeLast(".") + if (includeTimeStamp) "_${System.currentTimeMillis()}.$extension" else ".$extension"
         return this
     }
 
     fun ByteArray.rename(customName: String, includeTimeStamp: Boolean = false): ByteArray {
-        fileName = customName + if (includeTimeStamp) "_${System.currentTimeMillis()}" else ".$extension"
+        fileName = customName + if (includeTimeStamp) "_${System.currentTimeMillis()}.$extension" else ".$extension"
         return this
     }
 
     fun ByteArray.renameWithRandomId(includeTimeStamp: Boolean = false): ByteArray {
-        fileName = NanoIdUtils.randomNanoId() + if (includeTimeStamp) "_${System.currentTimeMillis()}" else ".$extension"
+        fileName = NanoIdUtils.randomNanoId() + if (includeTimeStamp) "_${System.currentTimeMillis()}.$extension" else ".$extension"
         return this
     }
 
