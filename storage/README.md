@@ -41,7 +41,7 @@ fun Application.configureFiretor() {
 
 ### Image
 
->>Supported image extension: `jpg`, `jpeg`, `png`, `gif`, `bmp`, `webp`, `tiff`
+>Supported image extension: `jpg`, `jpeg`, `png`, `gif`, `bmp`, `webp`, `tiff`
 
 Example 1:
 
@@ -114,7 +114,7 @@ Here some ImagePreprocessing functions:
 
 ### Document
 
->>Supported document extension: `pdf`, `doc`, `docx`, `xls`, `xlsx`, `ppt`, `pptx`, `txt`
+>Supported document extension: `pdf`, `doc`, `docx`, `xls`, `xlsx`, `ppt`, `pptx`, `txt`
 
 Example :
 
