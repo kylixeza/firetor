@@ -1,8 +1,8 @@
 package com.kylix.document
 
 enum class DocumentContentType(
-    val extension: String,
-    val contentType: String
+    internal val extension: String,
+    internal val contentType: String
 ) {
     DOCX("docx","application/vnd.openxmlformats-officedocument.wordprocessingml.document"),
     DOC("doc","application/msword"),

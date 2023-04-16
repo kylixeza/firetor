@@ -10,7 +10,7 @@ class DocumentPreprocessing(
 
     private var fileName = NanoIdUtils.randomNanoId() + ".$extension"
 
-    fun getFileName(): String = fileName
+    internal fun getFileName(): String = fileName
 
     fun ByteArray.renameWithOriginalName(includeTimeStamp: Boolean = false): ByteArray {
         fileName = originalFileName?.substringBeforeLast(".") + if (includeTimeStamp) "_${System.currentTimeMillis()}.$extension" else ".$extension"
