@@ -1,7 +1,8 @@
 package com.kylix.plugins
 
-import com.kylix.FirebaseStorageImage.uploadImage
-import com.kylix.ImageExtension
+import com.kylix.image.FirebaseStorageImage.uploadImage
+import com.kylix.image.ImageExtension
+import com.kylix.routes.postImage
 import io.ktor.http.content.*
 import io.ktor.server.routing.*
 import io.ktor.server.response.*
@@ -14,42 +15,6 @@ fun Application.configureRouting() {
             call.respondText("Hello World!")
         }
 
-        post("/image") {
-            val multipart = call.receiveMultipart()
-            var url: String? = null
-
-            try {
-                multipart.forEachPart {part ->
-                    if (part is PartData.FileItem) {
-                        url = part.uploadImage()
-                    }
-                }
-                call.respond(url ?: "No image uploaded")
-            } catch (e: Exception) {
-                call.respondText("Error: ${e.message}")
-            }
-        }
-
-        post("/image-with-params") {
-            val multipart = call.receiveMultipart()
-            var url: String? = null
-
-            try {
-                multipart.forEachPart {part ->
-                    if (part is PartData.FileItem) {
-                        url = part.uploadImage(
-                            path = "images",
-                            fileExtension = ImageExtension.JPG,
-                            preprocessing = {
-                                it.flipHorizontal()
-                            }
-                        )
-                    }
-                }
-                call.respond(url ?: "No image uploaded")
-            } catch (e: Exception) {
-                call.respondText("Error: ${e.message}")
-            }
-        }
+        this.postImage()
     }
 }
