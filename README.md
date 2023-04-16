@@ -9,6 +9,16 @@
 # Firetor
 Firetor is Ktor plugin to help you simplified connecting to firebase admin
 
+- [Firetor](#firetor)
+    * [Dependency](#dependency)
+    * [Setup](#setup)
+    * [Features](#features)
+        + [Firebase Storage](#-firebase-storage--https---githubcom-kylixeza-firetor-blob-release-storage-readmemd-)
+        + [Firebase Auth (TBA)](#firebase-auth--tba-)
+        + [Firebase Realtime DB (TBA)](#firebase-realtime-db--tba-)
+    * [Contributing](#contributing)
+    * [Contact](#contact)
+
 ## Dependency
 
 Firetor was distributed through jitpack and this sample is using gradle.kts file. 
