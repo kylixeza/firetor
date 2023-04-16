@@ -1,14 +1,13 @@
-package com.kylix
+package com.kylix.image
 
-import com.aventrix.jnanoid.jnanoid.NanoIdUtils
 import com.drew.imaging.ImageMetadataReader
 import com.drew.metadata.exif.ExifIFD0Directory
 import com.google.firebase.cloud.StorageClient
-import com.kylix.URLBuilder.getDownloadUrl
-import com.kylix.URLBuilder.reference
+import com.kylix.util.URLBuilder
+import com.kylix.util.URLBuilder.getDownloadUrl
+import com.kylix.util.URLBuilder.reference
 import io.ktor.http.content.*
 import java.io.ByteArrayInputStream
-import javax.imageio.ImageIO
 
 object FirebaseStorageImage {
 
@@ -16,13 +15,14 @@ object FirebaseStorageImage {
 
     fun PartData.FileItem.uploadImage(
         path: String? = null,
-        fileExtension: ImageExtension = ImageExtension.JPG,
+        fileExtension: ImageExtension = ImageExtension.ORIGINAL_FILE_EXTENSION,
         preprocessing: ImagePreprocessing.(ByteArray) -> ByteArray = { it }
     ) = run {
         val fileBytes = streamProvider().readBytes()
         val isRawImagePortrait = fileBytes.isPortraitImage()
+        val originalFileName = this.originalFileName
 
-        val imagePipeline = ImagePreprocessing(fileExtension, isRawImagePortrait)
+        val imagePipeline = ImagePreprocessing(fileExtension, isRawImagePortrait, originalFileName)
         val processedImage = imagePipeline.preprocessing(fileBytes)
         val normalizedImage = if (isRawImagePortrait) {
             imagePipeline.run { processedImage.rotate(90.0) }
@@ -30,12 +30,18 @@ object FirebaseStorageImage {
             processedImage
         }
 
-        val fileName = NanoIdUtils.randomNanoId() + "." + fileExtension.extension
+        val fileName = imagePipeline.getFileName()
+
+        val contentType = when (fileExtension) {
+            ImageExtension.ORIGINAL_FILE_EXTENSION -> "image/${originalFileName?.split(".")?.last()}"
+            else -> "image/${fileExtension.extension}"
+        }
+
         if (path == null) {
-            bucket.create(fileName, normalizedImage, "image/${fileExtension.extension}")
+            bucket.create(fileName, normalizedImage, contentType)
             return@run URLBuilder.initPath().getDownloadUrl(fileName)
         } else {
-            bucket.create("$path/$fileName", normalizedImage, "image/${fileExtension.extension}")
+            bucket.create("$path/$fileName", normalizedImage, contentType)
             var url = URLBuilder.initPath()
             val paths = path.split("/")
             paths.forEach { path ->
