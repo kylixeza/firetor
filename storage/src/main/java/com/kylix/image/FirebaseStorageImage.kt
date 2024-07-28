@@ -62,6 +62,21 @@ object FirebaseStorageImage {
         }
     }
 
+    /**
+     * This function is used to delete image to firebase storage
+     * @param path the path where the image is stored
+     * @return TRUE if the image was found and deleted, FALSE otherwise.
+     */
+    fun deleteImage(path: String) = run {
+        val imageBlob = bucket.get(path)
+        return@run if (imageBlob != null && imageBlob.exists()) {
+            imageBlob.delete()
+            true
+        } else {
+            false
+        }
+    }
+
     private fun ByteArray.isPortraitImage(): Boolean = run {
         val inputStream = ByteArrayInputStream(this)
         val metadata = ImageMetadataReader.readMetadata(inputStream)
